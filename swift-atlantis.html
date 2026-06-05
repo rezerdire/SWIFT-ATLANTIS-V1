@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Swift Atlantis Contracting L.L.C</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- FONTS: Oswald (industrial display) + Barlow (strong body) + Barlow Condensed (labels) -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand:   { 50:'#fdf9f3', 100:'#f7f0e3', 200:'#eeddc4', 300:'#e2c89f', 400:'#d4ad78', 500:'#c49558', 600:'#b07d3e', 700:'#8f6430', 800:'#6e4d24', 900:'#4d3519' },
+            slate2: { 50:'#f4f6f8', 100:'#e8ecf0', 200:'#cdd5dc', 300:'#adb8c2', 400:'#8697a5', 500:'#637887', 600:'#4d5f6d', 700:'#3a4a56', 800:'#273441', 900:'#16232e' },
+            warm:   { 50:'#fefcf9', 100:'#fdf7ef', 200:'#f8ead7', 300:'#f0d9b8', 400:'#e5c48e', 500:'#d6a95e' }
+          },
+          fontFamily: {
+            display: ['Oswald', 'sans-serif'],
+            body:    ['Barlow', 'sans-serif'],
+            label:   ['"Barlow Condensed"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: #fdf9f3; color: #273441; }
+
+    /* ── NAV ── */
+    #navbar { transition: all 0.4s ease; }
+    #navbar.scrolled { background: rgba(22,35,46,0.97); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+
+    /* ── HERO ── */
+    .hero-carousel {
+      position: relative; min-height: 100vh; overflow: hidden;
+      background: #16232e;
+    }
+    /* Subtle steel grid texture */
+    .hero-carousel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(196,149,88,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196,149,88,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 10; }
+
+    .hero-number { font-family: 'Oswald', sans-serif; font-weight: 300; }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #b07d3e;
+      font-weight: 600;
+    }
+    .section-title { font-family: 'Oswald', sans-serif; line-height: 1.05; letter-spacing: 0.01em; }
+
+    /* ── DIVIDER ── */
+    .gold-line { height: 3px; background: linear-gradient(90deg, #d4ad78, #c49558 40%, transparent); }
+
+    /* ── SERVICE CARD ── */
+    .service-card { transition: all 0.3s ease; border: 1px solid #eeddc4; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(176,125,62,0.12); border-color: #d4ad78; }
+    .service-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #f7f0e3, #eeddc4); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+    /* ── PROJECT CARD ── */
+    .project-card { transition: all 0.35s ease; cursor: pointer; }
+    .project-card:hover .project-img { transform: scale(1.05); }
+    .project-card:hover { box-shadow: 0 20px 60px rgba(39,52,65,0.14); }
+    .project-img { transition: transform 0.5s ease; }
+    .project-overlay { background: linear-gradient(to top, rgba(22,35,46,0.88) 0%, rgba(22,35,46,0.3) 50%, transparent 100%); }
+    .project-badge { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+    .project-num { font-family: 'Oswald', sans-serif; font-weight: 300; }
+
+    /* ── ONGOING CARD ── */
+    .ongoing-card { border: 1px solid #e8ecf0; transition: all 0.3s ease; }
+    .ongoing-card:hover { border-color: #d4ad78; box-shadow: 0 8px 30px rgba(176,125,62,0.1); }
+    .progress-bar { height: 3px; background: #eeddc4; border-radius: 2px; }
+    .progress-fill { height: 3px; background: linear-gradient(90deg, #c49558, #d4ad78); border-radius: 2px; transition: width 1s ease; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+    /* ── VALUE CARD ── */
+    .value-card { border-left: 3px solid #eeddc4; transition: border-color 0.3s; }
+    .value-card:hover { border-color: #c49558; }
+
+    /* ── CERT CARD ── */
+    .cert-card { border: 1px solid #e8ecf0; transition: all 0.3s; }
+    .cert-card:hover { border-color: #d4ad78; box-shadow: 0 4px 20px rgba(176,125,62,0.1); }
+
+    /* ── PROJECT DETAIL PAGE ── */
+    #project-detail { display: none; }
+    #project-detail.active { display: block; }
+    #main-site.hidden-site { display: none; }
+
+    .detail-hero {
+      background-size: cover; background-position: center;
+      min-height: 480px;
+    }
+    .detail-overlay { background: linear-gradient(to bottom, rgba(22,35,46,0.3) 0%, rgba(22,35,46,0.6) 100%); }
+
+    .thumb-img { transition: all 0.2s ease; border: 2px solid transparent; cursor: pointer; }
+    .thumb-img:hover, .thumb-img.active-thumb { border-color: #c49558; opacity: 1 !important; }
+
+    /* ── CONTACT ── */
+    .contact-input {
+      background: white; border: 1px solid #eeddc4; border-radius: 8px;
+      padding: 0.75rem 1rem; font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+      color: #273441; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+    }
+    .contact-input:focus { outline: none; border-color: #c49558; box-shadow: 0 0 0 3px rgba(196,149,88,0.12); }
+
+    /* ── FOOTER ── */
+    footer { background: #16232e; }
+
+    /* ── FADE IN ── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE MENU ── */
+    #mobile-menu { transition: max-height 0.4s ease, opacity 0.4s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 500px; opacity: 1; }
+
+    /* Gallery grid */
+    .gallery-main { aspect-ratio: 16/10; object-fit: cover; }
+    .gallery-thumb { aspect-ratio: 4/3; object-fit: cover; }
+
+    /* Logo image */
+    .nav-logo-img { width: 44px; height: 44px; object-fit: contain; filter: brightness(0) invert(1); }
+    #navbar.scrolled .nav-logo-img { filter: brightness(0) invert(1); }
+    .nav-logo-img-default { width: 44px; height: 44px; object-fit: contain; }
+  </style>
+</head>
+
+<body>
+
+<!-- ════════════════════════════════════
+     NAVBAR
+════════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-3 px-6 lg:px-12">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" onclick="showMain()" class="flex items-center gap-3">
+      <img src="Images/logo/logo-swift.png" alt="Swift Atlantis Logo" class="nav-logo-img" />
+      <div>
+        <div class="font-display font-semibold text-white leading-none text-sm tracking-widest uppercase">Swift Atlantis</div>
+        <div style="font-size:0.6rem" class="font-label text-sand-400 tracking-widest uppercase">Contracting L.L.C</div>
+      </div>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden lg:flex items-center gap-7">
+      <a href="#about" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">About</a>
+      <a href="#vision" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">Vision</a>
+      <a href="#services" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">Services</a>
+      <a href="#projects" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">Projects</a>
+      <a href="#ongoing" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">Ongoing</a>
+      <a href="#leadership" class="text-sm font-label tracking-wider uppercase text-white/70 hover:text-sand-400 transition-colors">Leadership</a>
+      <a href="#contact" class="text-sm font-label tracking-wider uppercase bg-sand-600 text-white px-5 py-2.5 hover:bg-sand-700 transition-colors" style="clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);">Contact Us</a>
+    </div>
+
+    <!-- Mobile Burger -->
+    <button id="burger" onclick="toggleMenu()" class="lg:hidden p-2 text-white">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="lg:hidden bg-slate2-900 border-t border-slate2-700 mt-3 rounded-xl overflow-hidden">
+    <div class="flex flex-col px-6 py-4 gap-3">
+      <a href="#about" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">About</a>
+      <a href="#vision" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">Vision</a>
+      <a href="#services" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">Services</a>
+      <a href="#projects" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">Projects</a>
+      <a href="#ongoing" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">Ongoing</a>
+      <a href="#leadership" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase text-white/70 py-1">Leadership</a>
+      <a href="#contact" onclick="toggleMenu()" class="text-sm font-label tracking-wider uppercase bg-sand-600 text-white px-4 py-2 text-center">Contact Us</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ════════════════════════════════════
+     MAIN SITE
+════════════════════════════════════ -->
+<div id="main-site">
+
+<!-- ── HERO CAROUSEL ── -->
+<section class="hero-carousel min-h-screen flex items-center pt-24 pb-20">
+
+  <div class="hero-content max-w-7xl mx-auto px-6 lg:px-12 w-full">
+    <div class="max-w-3xl">
+      <div class="section-label mb-6 fade-up" style="color:#c49558">Dubai, United Arab Emirates</div>
+      <h1 class="section-title text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 fade-up" style="transition-delay:0.1s; letter-spacing:0.02em;">
+        SWIFT<br/><span class="text-sand-400">ATLANTIS</span><br/><span class="font-light text-white/80" style="font-size:0.72em">CONTRACTING</span>
+      </h1>
+      <div class="w-16 h-1 bg-sand-500 mb-6 fade-up" style="transition-delay:0.15s"></div>
+      <p class="font-body text-white/70 text-lg max-w-xl leading-relaxed mb-10 fade-up" style="transition-delay:0.2s">
+        A Dubai-based general contracting company delivering integrated construction solutions — from excavation to handover — with precision, quality, and trust.
+      </p>
+      <div class="flex flex-wrap gap-4 mb-16 fade-up" style="transition-delay:0.3s">
+        <a href="#projects" class="bg-sand-600 text-white px-8 py-3.5 font-label tracking-widest uppercase text-sm hover:bg-sand-700 transition-colors" style="clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);">View Projects</a>
+        <a href="#contact" class="border border-white/30 text-white px-8 py-3.5 font-label tracking-widest uppercase text-sm hover:border-sand-400 hover:text-sand-400 transition-all">Get In Touch →</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex flex-wrap gap-10 fade-up" style="transition-delay:0.4s">
+        <div>
+          <div class="hero-number text-5xl text-sand-400 font-bold">20+</div>
+          <div class="font-label text-xs text-white/50 tracking-widest uppercase mt-1">Yrs Experience</div>
+        </div>
+        <div class="w-px bg-white/10 self-stretch"></div>
+        <div>
+          <div class="hero-number text-5xl text-sand-400 font-bold">24+</div>
+          <div class="font-label text-xs text-white/50 tracking-widest uppercase mt-1">Projects</div>
+        </div>
+        <div class="w-px bg-white/10 self-stretch"></div>
+        <div>
+          <div class="hero-number text-5xl text-sand-400 font-bold">2022</div>
+          <div class="font-label text-xs text-white/50 tracking-widest uppercase mt-1">Est. UAE</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ── ABOUT ── -->
+<section id="about" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid lg:grid-cols-2 gap-16 items-start">
+      <div class="fade-up">
+        <div class="section-label mb-4">About Us</div>
+        <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold mb-6 uppercase">
+          Built on Trust,<br/><span class="font-light text-sand-600">Delivered with</span><br/>Precision
+        </h2>
+        <div class="gold-line w-24 mb-8"></div>
+        <p class="font-body text-slate2-600 leading-relaxed mb-5">
+          Swift Atlantis Contracting L.L.C was established on 15th September 2022 under Commercial License No. 1080914, approved by the Dubai Economic Department and Dubai Municipality.
+        </p>
+        <p class="font-body text-slate2-600 leading-relaxed mb-8">
+          We are licensed to carry out integrated construction works as a main contractor — from excavations through to handover of building completion certificates — with approved scope for G+1 and complex multi-storey structures.
+        </p>
+        <p class="font-body text-slate2-600 leading-relaxed">
+          Our approach combines rigorous compliance with local authority regulations, an unwavering commitment to safety and quality, and on-time delivery aligned with project programs and consultant directives.
+        </p>
+      </div>
+
+      <div class="fade-up" style="transition-delay:0.15s">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="cert-card bg-warm-50 rounded-xl p-6">
+            <div class="section-label mb-2">Legal Type</div>
+            <div class="font-display text-xl text-slate2-800 font-semibold">LLC</div>
+            <div class="text-xs text-slate2-500 mt-1">Single Owner</div>
+          </div>
+          <div class="cert-card bg-warm-50 rounded-xl p-6">
+            <div class="section-label mb-2">Established</div>
+            <div class="font-display text-xl text-slate2-800 font-semibold">Sept 2022</div>
+            <div class="text-xs text-slate2-500 mt-1">Dubai, UAE</div>
+          </div>
+          <div class="cert-card bg-warm-50 rounded-xl p-6">
+            <div class="section-label mb-2">Activity</div>
+            <div class="font-display text-xl text-slate2-800 font-semibold">Building</div>
+            <div class="text-xs text-slate2-500 mt-1">Contracting</div>
+          </div>
+          <div class="cert-card bg-warm-50 rounded-xl p-6">
+            <div class="section-label mb-2">Approved Scope</div>
+            <div class="font-display text-xl text-slate2-800 font-semibold">G+1</div>
+            <div class="text-xs text-slate2-500 mt-1">& Multi-storey</div>
+          </div>
+        </div>
+        <div class="mt-6 rounded-xl overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80" alt="Construction" class="w-full h-52 object-cover" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── VISION ── -->
+<section id="vision" class="py-24 bg-sand-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="text-center mb-16 fade-up">
+      <div class="section-label mb-4">Our Foundation</div>
+      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Vision, Aims <span class="font-light text-sand-600">&amp; Values</span></h2>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8 mb-16">
+      <div class="lg:col-span-1 fade-up">
+        <div class="rounded-2xl overflow-hidden h-full">
+          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="Construction" class="w-full h-48 object-cover" />
+          <div class="bg-white p-7 border border-sand-100">
+            <div class="section-label mb-3">AIMS</div>
+            <h3 class="font-display text-2xl text-slate2-800 font-semibold uppercase mb-4">Our Aims &amp; Message</h3>
+            <p class="text-sm font-body text-slate2-600 leading-relaxed">
+              To practice contracting activity in accordance with all laws and authority procedures of local governments, with full commitment to safety and health instructions for construction sites, and observing quality and control to implement facilities that conform to project specifications.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 flex flex-col gap-6 fade-up" style="transition-delay:0.1s">
+        <div class="bg-slate2-900 rounded-2xl p-8 text-white">
+          <div class="section-label mb-3" style="color:#d4ad78">Vision</div>
+          <h3 class="font-display text-3xl text-white font-semibold uppercase mb-3">To Be the UAE's Most Trusted Contractor</h3>
+          <p class="font-body text-slate2-300 text-sm leading-relaxed">
+            To be recognized as a leading, reliable, and innovative contracting company in the UAE — setting the benchmark for construction quality, regulatory compliance, and client satisfaction across every project we undertake.
+          </p>
+        </div>
+        <div class="bg-white border border-sand-200 rounded-2xl p-8">
+          <div class="section-label mb-3">Mission</div>
+          <h3 class="font-display text-3xl text-slate2-800 font-semibold uppercase mb-3">Deliver Excellence from Ground to Handover</h3>
+          <p class="font-body text-slate2-600 text-sm leading-relaxed">
+            To deliver fully integrated construction solutions — from excavation to completion certificate — through disciplined project management, skilled workforce, and an unwavering commitment to safety, quality, and on-schedule delivery.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-label mb-6 text-center">Core Values</div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">◈</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Quality</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Uncompromising standards at every phase</div>
+        </div>
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">⬡</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Safety</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">HSE compliance on every site, every day</div>
+        </div>
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">◇</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Integrity</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Transparent dealings with every stakeholder</div>
+        </div>
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">◉</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Timeliness</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Projects delivered on schedule, every time</div>
+        </div>
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">△</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Innovation</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Modern methods and engineering solutions</div>
+        </div>
+        <div class="value-card bg-white p-5 rounded-xl pl-5">
+          <div class="text-sand-500 text-2xl mb-2">▣</div>
+          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Compliance</div>
+          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Full adherence to Dubai Municipality rules</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SERVICES ── -->
+<section id="services" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="mb-14 fade-up">
+      <div class="section-label mb-4">What We Do</div>
+      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Our <span class="font-light text-sand-600">Services</span></h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">General Contracting</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Full-scope main contractor services for residential, commercial, and mixed-use projects — managing all trades from ground-breaking to handover.</p>
+      </div>
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up" style="transition-delay:0.05s">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">Residential Buildings</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Construction of villas, townhouses, and multi-storey apartment buildings for private developers and government-linked clients across the UAE.</p>
+      </div>
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up" style="transition-delay:0.1s">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">Commercial Projects</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Hotel apartments, retail complexes, factories, and commercial facilities — executed with precision engineering and timely delivery.</p>
+      </div>
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up" style="transition-delay:0.15s">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22V12M12 12C12 6.5 6 2 6 2s6 4.5 6 10zm0 0c0-5.5 6-10 6-10s-6 4.5-6 10"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">Resort &amp; Hospitality</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Specialized construction for luxury resorts, hotels, and hospitality facilities — balancing aesthetics with structural integrity.</p>
+      </div>
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up" style="transition-delay:0.2s">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">Site Supervision</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Expert on-site management from excavation to final inspection, ensuring compliance with Dubai Municipality and authority standards.</p>
+      </div>
+      <div class="service-card bg-warm-50 rounded-2xl p-7 fade-up" style="transition-delay:0.25s">
+        <div class="service-icon mb-5">
+          <svg width="20" height="20" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h3 class="font-display text-xl text-slate2-800 mb-3 font-semibold uppercase">HSE &amp; Quality Control</h3>
+        <p class="text-sm font-body text-slate2-500 leading-relaxed">Comprehensive health, safety, and quality assurance management — ensuring every phase meets regulatory standards and client specifications.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── PROJECTS ── -->
+<section id="projects" class="py-24 bg-sand-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="mb-14 fade-up">
+      <div class="section-label mb-4">Portfolio</div>
+      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Projects by <span class="font-light text-sand-600">Our Director</span></h2>
+      <p class="font-body text-slate2-500 mt-4 max-w-xl text-sm leading-relaxed">Key projects managed by Eng. Ahmed Nada across UAE and Egypt — spanning luxury resorts, residential towers, commercial buildings, and more.</p>
+    </div>
+    <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+
+
+<!-- ── ONGOING ── -->
+<section id="ongoing" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="mb-14 fade-up">
+      <div class="section-label mb-4">Live Projects</div>
+      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Ongoing <span class="font-light text-sand-600">Projects</span></h2>
+      <p class="font-body text-slate2-500 mt-4 text-sm">Projects currently under active construction by Swift Atlantis Contracting across the UAE.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Villa Complex" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-emerald-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> In Progress
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Residential</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2024-01</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">Residential Villa Complex</h3>
+          <div class="text-xs text-slate2-500 mb-1">Al Barsha South, Dubai, UAE</div>
+          <div class="text-xs text-slate2-400 mb-4">G+1 + Roof Terrace &nbsp;·&nbsp; Started Q1 2024 &nbsp;·&nbsp; Target Q4 2025</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>65%</span></div>
+        </div>
+      </div>
+
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up" style="transition-delay:0.08s">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80" alt="Office" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> Structural Phase
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Commercial</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2024-02</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">Commercial Office Building</h3>
+          <div class="text-xs text-slate2-500 mb-1">Business Bay, Dubai, UAE</div>
+          <div class="text-xs text-slate2-400 mb-4">B+G+12 Floors &nbsp;·&nbsp; Started Q3 2024 &nbsp;·&nbsp; Target Q2 2026</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:35%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>35%</span></div>
+        </div>
+      </div>
+
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up" style="transition-delay:0.16s">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=700&q=80" alt="Compound" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-amber-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> Finishing Phase
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Residential</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2025-01</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">G+1 Residential Compound</h3>
+          <div class="text-xs text-slate2-500 mb-1">Al Quoz, Dubai, UAE</div>
+          <div class="text-xs text-slate2-400 mb-4">G+1 + Landscaped Podium &nbsp;·&nbsp; Started Q4 2023 &nbsp;·&nbsp; Target Q3 2025</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>88%</span></div>
+        </div>
+      </div>
+
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up" style="transition-delay:0.24s">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=700&q=80" alt="Retail" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-emerald-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> In Progress
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Mixed Use</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2025-02</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">Retail + Residential Development</h3>
+          <div class="text-xs text-slate2-500 mb-1">Jumeirah Village Circle, Dubai</div>
+          <div class="text-xs text-slate2-400 mb-4">B+G+6 Floors &nbsp;·&nbsp; Started Q1 2025 &nbsp;·&nbsp; Target Q1 2027</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>20%</span></div>
+        </div>
+      </div>
+
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up" style="transition-delay:0.32s">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&q=80" alt="Hotel" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> Foundation Phase
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Hospitality</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2025-03</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">Luxury Hotel Apartments</h3>
+          <div class="text-xs text-slate2-500 mb-1">Downtown Dubai, UAE</div>
+          <div class="text-xs text-slate2-400 mb-4">B+G+18 Floors &nbsp;·&nbsp; Started Q2 2025 &nbsp;·&nbsp; Target Q4 2027</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>10%</span></div>
+        </div>
+      </div>
+
+      <div class="ongoing-card bg-warm-50 rounded-2xl overflow-hidden fade-up" style="transition-delay:0.4s">
+        <div class="relative h-44 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=700&q=80" alt="Warehouse" class="w-full h-full object-cover" />
+          <div class="absolute top-3 left-3 bg-emerald-500 text-white text-xs font-label px-2 py-1 rounded-full flex items-center gap-1.5 tracking-wider uppercase">
+            <span class="status-dot bg-white"></span> In Progress
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 text-slate2-700 text-xs font-label px-2 py-1 rounded-full tracking-wider uppercase">Industrial</div>
+        </div>
+        <div class="p-6">
+          <div class="font-label text-xs text-slate2-400 mb-1 tracking-wider">PROJ-2025-04</div>
+          <h3 class="font-display text-xl text-slate2-800 mb-1 font-semibold uppercase">Industrial Warehouse Complex</h3>
+          <div class="text-xs text-slate2-500 mb-1">Al Quoz Industrial, Dubai, UAE</div>
+          <div class="text-xs text-slate2-400 mb-4">G+Mezzanine &nbsp;·&nbsp; Started Q3 2025 &nbsp;·&nbsp; Target Q1 2026</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+          <div class="flex justify-between mt-2 text-xs text-slate2-400"><span>Progress</span><span>55%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── LEADERSHIP ── -->
+<section id="leadership" class="py-24 bg-slate2-900">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid lg:grid-cols-2 gap-16 items-start">
+      <div class="fade-up">
+        <div class="section-label mb-4" style="color:#d4ad78">Leadership</div>
+        <h2 class="section-title text-5xl lg:text-6xl text-white font-semibold uppercase mb-6">Two Decades of <span style="color:#d4ad78" class="font-light">Construction Mastery</span></h2>
+        <div class="gold-line w-24 mb-8"></div>
+        <p class="font-body text-slate2-300 leading-relaxed mb-5 text-sm">
+          Eng. Ahmed Mohamed Nada brings over 20 years of hands-on construction experience to Swift Atlantis. A graduate of Mansoura University's Faculty of Engineering (Architectural Engineering, 2002), he has progressed through every engineering stage — from site observation and supervision to full project contracting and consultancy.
+        </p>
+        <p class="font-body text-slate2-300 leading-relaxed text-sm">
+          His portfolio spans luxury resorts, high-rise residential towers, hospitals, factories, and retail complexes across the UAE and Egypt — serving prestigious clients and working under major development groups including Travco Group.
+        </p>
+
+        <div class="flex flex-wrap gap-2 mt-8">
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Site Supervision</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Project Management</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Structural Engineering</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Consultancy</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">UAE Regulations</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Luxury Hospitality</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">High-Rise Construction</span>
+          <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Healthcare Facilities</span>
+        </div>
+      </div>
+
+      <div class="fade-up" style="transition-delay:0.15s">
+        <div class="bg-slate2-800 rounded-2xl p-8 border border-slate2-700">
+          <div class="flex items-center gap-5 mb-8">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-sand-400 to-sand-600 flex items-center justify-center text-white font-display text-2xl font-bold">AN</div>
+            <div>
+              <div class="font-display text-xl text-white font-semibold uppercase">Eng. Ahmed Nada</div>
+              <div class="text-xs font-label text-sand-400 mt-1 tracking-widest uppercase">Owner · Managing Director</div>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="flex gap-4 pb-4 border-b border-slate2-700">
+              <div class="section-label" style="color:#8697a5;min-width:90px">Education</div>
+              <div class="text-sm text-slate2-300">B.Sc. Architectural Engineering, Mansoura University (2002)</div>
+            </div>
+            <div class="flex gap-4 pb-4 border-b border-slate2-700">
+              <div class="section-label" style="color:#8697a5;min-width:90px">Experience</div>
+              <div class="text-sm text-slate2-300">20+ Years in Construction</div>
+            </div>
+            <div class="flex gap-4">
+              <div class="section-label" style="color:#8697a5;min-width:90px">Regions</div>
+              <div class="text-sm text-slate2-300">UAE &amp; Egypt</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="section-label mb-5" style="color:#8697a5">Certifications</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate2-800 rounded-xl p-5 border border-slate2-700">
+              <div class="text-xs font-label text-sand-400 mb-2 tracking-widest uppercase">Commercial License</div>
+              <div class="font-display text-white text-base font-semibold">No. 1080914</div>
+              <div class="text-xs text-slate2-400 mt-1">Dubai DET</div>
+            </div>
+            <div class="bg-slate2-800 rounded-xl p-5 border border-slate2-700">
+              <div class="text-xs font-label text-sand-400 mb-2 tracking-widest uppercase">Commercial Register</div>
+              <div class="font-display text-white text-base font-semibold">No. 1762575</div>
+              <div class="text-xs text-slate2-400 mt-1">Dubai Economic Dev.</div>
+            </div>
+            <div class="bg-slate2-800 rounded-xl p-5 border border-slate2-700">
+              <div class="text-xs font-label text-sand-400 mb-2 tracking-widest uppercase">Chamber Member</div>
+              <div class="font-display text-white text-base font-semibold">No. 418548</div>
+              <div class="text-xs text-slate2-400 mt-1">Dubai Chamber</div>
+            </div>
+            <div class="bg-slate2-800 rounded-xl p-5 border border-slate2-700">
+              <div class="text-xs font-label text-sand-400 mb-2 tracking-widest uppercase">VAT Registered</div>
+              <div class="font-display text-white text-sm font-semibold">TRN 1040107...</div>
+              <div class="text-xs text-slate2-400 mt-1">UAE Federal Tax Authority</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── CONTACT ── -->
+<section id="contact" class="py-24 bg-warm-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid lg:grid-cols-2 gap-16">
+      <div class="fade-up">
+        <div class="section-label mb-4">Get in Touch</div>
+        <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase mb-6">Let's Build <span class="font-light text-sand-600">Together</span></h2>
+        <div class="gold-line w-24 mb-8"></div>
+        <p class="font-body text-slate2-600 text-sm leading-relaxed mb-10">
+          Ready to start your next construction project in Dubai or the UAE? Contact Swift Atlantis Contracting to discuss your requirements with our team.
+        </p>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-sand-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="font-label text-xs text-sand-600 tracking-widest uppercase mb-1">Office Address</div>
+              <div class="text-sm font-body text-slate2-700 leading-relaxed">P.O Box: 60054 Dubai<br/>Office 901, Crystal Tower, Business Bay<br/>Dubai, United Arab Emirates</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-sand-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.01 4.18 2 2 0 012 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="font-label text-xs text-sand-600 tracking-widest uppercase mb-1">Mobile</div>
+              <div class="text-sm font-body text-slate2-700">+971 52-1500177</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-sand-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" fill="none" stroke="#b07d3e" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="font-label text-xs text-sand-600 tracking-widest uppercase mb-1">Email</div>
+              <div class="text-sm font-body text-slate2-700">ahmednada@swiftatlantis.ae</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up" style="transition-delay:0.15s">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-sand-100">
+          <h3 class="font-display text-2xl text-slate2-800 mb-6 font-semibold uppercase">Send an Enquiry</h3>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">First Name</label>
+              <input type="text" class="contact-input" placeholder="Ahmed" />
+            </div>
+            <div>
+              <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">Last Name</label>
+              <input type="text" class="contact-input" placeholder="Nada" />
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">Email Address</label>
+            <input type="email" class="contact-input" placeholder="your@email.com" />
+          </div>
+          <div class="mb-4">
+            <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">Phone Number</label>
+            <input type="tel" class="contact-input" placeholder="+971 5X XXX XXXX" />
+          </div>
+          <div class="mb-4">
+            <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">Project Type</label>
+            <select class="contact-input">
+              <option value="">Select project type...</option>
+              <option>Residential Building</option>
+              <option>Commercial Building</option>
+              <option>Hotel / Resort</option>
+              <option>Industrial / Factory</option>
+              <option>Villa / Townhouse</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label class="font-label text-xs text-slate2-500 tracking-widest uppercase block mb-2">Message</label>
+            <textarea rows="4" class="contact-input resize-none" placeholder="Tell us about your project..."></textarea>
+          </div>
+          <button class="w-full bg-sand-600 text-white py-3.5 font-label tracking-widest uppercase text-sm hover:bg-sand-700 transition-colors" style="clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);">
+            Submit Enquiry →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+
+<footer class="py-10 px-6 lg:px-12">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-3">
+      <img src="Images/logo/logo-swift.png" alt="Swift Atlantis Logo" style="width:36px;height:36px;object-fit:contain;filter:brightness(0) invert(1) opacity(0.7)" />
+      <span class="text-slate2-300 font-label text-sm tracking-wider uppercase">Swift Atlantis Contracting L.L.C</span>
+    </div>
+    <div class="text-slate2-500 text-xs font-label tracking-wider uppercase text-center">License No. 1080914 · Dubai, United Arab Emirates</div>
+    <div class="text-slate2-500 text-xs font-body">© 2026 Swift Atlantis Contracting L.L.C · All rights reserved</div>
+  </div>
+</footer>
+
+</div><!-- /main-site -->
+
+
+<!-- ════════════════════════════════════
+     PROJECT DETAIL PAGE
+════════════════════════════════════ -->
+<div id="project-detail">
+  <div class="fixed top-0 left-0 right-0 z-50 bg-slate2-900/95 backdrop-blur border-b border-slate2-700 px-6 lg:px-12 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <button onclick="showMain()" class="flex items-center gap-2 text-sm text-white/70 hover:text-sand-400 transition-colors font-label tracking-wider uppercase">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Projects
+      </button>
+      <div class="flex items-center gap-3">
+        <img src="Images/logo/logo-swift.png" alt="Swift Atlantis Logo" style="width:32px;height:32px;object-fit:contain;filter:brightness(0) invert(1)" />
+        <span class="font-label text-xs text-slate2-400 hidden sm:block tracking-wider uppercase">Swift Atlantis Contracting</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="detail-hero" class="detail-hero pt-16">
+    <div class="detail-overlay min-h-96 flex items-end">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12 w-full pb-12 pt-24">
+        <div id="detail-badge" class="inline-block project-badge bg-sand-500/80 text-white px-3 py-1 rounded-full mb-4"></div>
+        <div id="detail-num" class="project-num text-7xl text-white/20 font-light leading-none mb-2"></div>
+        <h1 id="detail-title" class="section-title text-4xl md:text-6xl text-white font-semibold uppercase"></h1>
+        <p id="detail-location" class="font-label text-sm text-white/70 mt-3 tracking-widest uppercase"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+    <div class="grid lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-2">
+        <div class="section-label mb-3">Project Overview</div>
+        <p id="detail-desc" class="font-body text-slate2-600 leading-relaxed text-base mb-10"></p>
+        <div class="rounded-2xl overflow-hidden mb-4 bg-sand-100">
+          <img id="gallery-main" src="" alt="Project" class="gallery-main w-full" />
+        </div>
+        <div id="gallery-thumbs" class="grid grid-cols-4 gap-3"></div>
+      </div>
+
+      <div>
+        <div class="bg-warm-50 rounded-2xl p-7 border border-sand-100 sticky top-24">
+          <div class="section-label mb-5">Project Details</div>
+          <div id="detail-stats" class="space-y-4"></div>
+          <div class="gold-line my-6"></div>
+          <div class="section-label mb-3">Category</div>
+          <div id="detail-category" class="font-display text-2xl text-slate2-800 mb-6 font-semibold uppercase"></div>
+          <a href="#contact" onclick="showMain(); setTimeout(()=>{document.querySelector('#contact').scrollIntoView({behavior:'smooth'})},100)" class="block w-full bg-sand-600 text-white text-center py-3 font-label tracking-widest uppercase text-sm hover:bg-sand-700 transition-colors" style="clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);">
+            Enquire About This Project →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     DATA + SCRIPTS
+════════════════════════════════════ -->
+<script>
+const PROJECTS = [
+  { id:1,  badge:"Resort", category:"Resort / Hospitality", title:"Royal Miramar Resort", location:"Al Aqah, Al Fujairah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/1.png", description:"A prestigious 316-room luxury resort development in Al Aqah, Al Fujairah — comprising the main building, staff building, and club house. This landmark hospitality project demanded meticulous coordination of structural, MEP, and finishing trades to deliver a world-class guest experience.", stats:[{label:"Rooms",value:"316"},{label:"Location",value:"UAE"},{label:"Category",value:"Luxury"}], images:["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80","https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80","https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80","https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80","https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"] },
+  { id:2, badge:"Hotel", category:"Hotel / Commercial", title:"Damas Hotel", location:"Dibba Al Fujairah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/2.png", description:"A B+G+7 floor hotel development in Dibba Al Fujairah — delivering a modern hospitality structure with full structural, MEP, and fit-out works completed to municipality standards.", stats:[{label:"Floors",value:"B+G+7"},{label:"Emirates",value:"Fujairah"}], images:["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&q=80","https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80","https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&q=80","https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80"] },
+  { id:3,  badge:"Residential", category:"Residential", title:"2 Residential Buildings", location:"Muwaileh Commercial, Sharjah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/3.png", description:"Twin B+G+7 residential towers in Muwaileh Commercial, Sharjah — a dual-building residential project executed concurrently with coordinated scheduling to optimize delivery timelines.", stats:[{label:"Buildings",value:"2"},{label:"Floors",value:"B+G+7"}], images:["https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=80","https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80","https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=800&q=80","https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80"] },
+  { id:4,  badge:"Residential", category:"Residential", title:"Residential Building", location:"Al Khan, Sharjah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/4.png", description:"A high-rise residential tower (G+5P+15 typical floors) in Al Khan, Sharjah — a landmark multi-storey development delivering premium residential units with full structural and fit-out works.", stats:[{label:"Floors",value:"G+5P+15"},{label:"Emirates",value:"Sharjah"}], images:["https://images.unsplash.com/photo-1460317442991-0ec209397118?w=1200&q=80","https://images.unsplash.com/photo-1515263487990-61b07816dd6e?w=800&q=80","https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80","https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80"] },
+  { id:5,  badge:"Residential", category:"Residential", title:"2 Residential Buildings", location:"Jesco, Sharjah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/5.png", description:"Two compact G+1 residential buildings in Jesco, Sharjah — a dual-building residential project efficiently delivered within a tight footprint.", stats:[{label:"Buildings",value:"2"},{label:"Floors",value:"G+1"}], images:["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=1200&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80","https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80","https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80"] },
+  { id:6, badge:"Hotel", category:"Hotel / Hospitality", title:"Hotel Apartment", location:"Palm Jumeirah, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/6.png", description:"A B+G+8 hotel apartment development on the iconic Palm Jumeirah — one of Dubai's most prestigious addresses, delivered with premium finishing standards under the Royal Bay brand.", stats:[{label:"Floors",value:"B+G+8"},{label:"Location",value:"Palm Jumeirah"},{label:"Brand",value:"Royal Bay"}], images:["https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=1200&q=80","https://images.unsplash.com/photo-1549294413-26f195200c16?w=800&q=80","https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?w=800&q=80","https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80"] },
+  { id:7, badge:"Residential", category:"Residential", title:"2 Residential Buildings", location:"Nadd Al Hamar, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/7.png", description:"Twin B+G+7 residential buildings in Nadd Al Hamar, Dubai — a concurrent dual-building delivery with coordinated structural and MEP works.", stats:[{label:"Buildings",value:"2"},{label:"Floors",value:"B+G+7"}], images:["https://images.unsplash.com/photo-1515263487990-61b07816dd6e?w=1200&q=80","https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80","https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80","https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80"] },
+  { id:8,  badge:"Industrial", category:"Industrial", title:"Gold Factory", location:"Jabel Ali, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/8.png", description:"A G+2 gold manufacturing facility in Jabel Ali, Dubai — a specialist industrial project combining large-span factory floor construction with premium office and operational fit-out.", stats:[{label:"Floors",value:"G+2"},{label:"Location",value:"Jabel Ali, Dubai"}], images:["https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1200&q=80","https://images.unsplash.com/photo-1565793979060-f68c6818cfa9?w=800&q=80","https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80","https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&q=80"] },
+  { id:9, badge:"Mixed Use", category:"Mixed-Use Development", title:"95 Townhouses + Retail Mall", location:"Jumeirah Golf Estates, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/9.jpeg", description:"A landmark mixed-use development comprising 95 luxury townhouses alongside a retail mall at Jumeirah Golf Estates — combining residential excellence with vibrant community retail.", stats:[{label:"Townhouses",value:"95"},{label:"Retail",value:"+Mall"},{label:"Location",value:"JGE Dubai"}], images:["https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=1200&q=80","https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80","https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80","https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80"] },
+  { id:10, badge:"Residential", category:"Residential", title:"Residential Building", location:"Studio City, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/10.jpeg", description:"A B+G+8 residential building in Studio City, Dubai — a modern mid-rise development featuring premium finishes and full MEP coordination.", stats:[{label:"Floors",value:"B+G+8"},{label:"Location",value:"Studio City, Dubai"}], images:["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80","https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=800&q=80","https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80","https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80"] },
+  { id:11,  badge:"Residential", category:"Residential", title:"11 Residential Buildings", location:"Meydan One, Nadd Al Sheba, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/empty.jpg", description:"An ambitious 11-building residential complex ranging from 2B+G+7 to 2B+G+10 floors in the prestigious Meydan One community, Nadd Al Sheba.", stats:[{label:"Buildings",value:"11"},{label:"Community",value:"Meydan One"}], images:["https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1200&q=80","https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80","https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80","https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&q=80"] },
+  { id:12,  badge:"Residential", category:"Residential — KSA", title:"Residential Building", location:"Jeddah, Saudi Arabia", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/12.jpeg", description:"A G+4 floors + roof residential building in Jeddah, KSA — designed and constructed to Saudi municipality standards with full structural, MEP, and architectural fit-out works.", stats:[{label:"Floors",value:"G+4+Roof"},{label:"Location",value:"KSA"}], images:["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80","https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80","https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=800&q=80"] },
+  { id:13, badge:"Healthcare", category:"Healthcare", title:"Al Loloaa Hospital", location:"Wadi Al Natron, Cairo–Alexandria Desert Road, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/13.jpeg", description:"A G+Mezzanine+5 floor hospital complex in Wadi Al Natron on the Cairo–Alexandria Desert Road — demanding the highest standards of structural integrity, MEP coordination, and specialist medical-grade fit-out.", stats:[{label:"Floors",value:"G+M+5"},{label:"Location",value:"Egypt"},{label:"Type",value:"Hospital"}], images:["https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1200&q=80","https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80","https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80","https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800&q=80"] },
+  { id:14,  badge:"Residential", category:"Residential Design", title:"Residential Building Design", location:"6 October, Cairo–Ismailia Desert Road, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/14.jpeg", description:"A B+G+7 residential building design for the 6 October Association on the Cairo–Ismailia Desert Road — a full architectural design and supervision project.", stats:[{label:"Floors",value:"B+G+7"},{label:"Location",value:"Egypt"},{label:"Type",value:"Design"}], images:["https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&q=80","https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80","https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80","https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"] },
+  { id:15,  badge:"Residential", category:"Residential Design", title:"Residential Building Design", location:"Mansoura City, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/15.jpeg", description:"Front elevation design for a B+G+11 residential tower in Mansoura City, Egypt — delivering a striking contemporary façade for a prominent urban development.", stats:[{label:"Floors",value:"B+G+11"},{label:"Location",value:"Mansoura, Egypt"}], images:["https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80","https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80","https://images.unsplash.com/photo-1515263487990-61b07816dd6e?w=800&q=80","https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80"] },
+  { id:16,  badge:"Residential", category:"Residential — Villa", title:"Villa", location:"New Cairo, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/16.jpeg", description:"A B+G+2+roof private villa in New Cairo, Egypt — a fully custom residential project executed with premium architectural finishes and detailed structural works.", stats:[{label:"Floors",value:"B+G+2+Roof"},{label:"Location",value:"New Cairo, Egypt"}], images:["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80","https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80","https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80","https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&q=80"] },
+  { id:17,  badge:"Residential", category:"Residential — Villa", title:"Villa Ain Al Sokhna", location:"Ain Al Sokhna, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/17.jpeg", description:"A G+1+roof villa in Ain Al Sokhna, Egypt — a luxury beachside residential project featuring resort-style landscaping and premium construction finishes.", stats:[{label:"Floors",value:"G+1+Roof"},{label:"Location",value:"Ain Al Sokhna"}], images:["https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&q=80","https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80","https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=800&q=80","https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80"] },
+  { id:18,  badge:"Design", category:"Residential Design", title:"Villa Design", location:"Tahta, Suhaj, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/18.jpeg", description:"A G+3+roof villa design in Tahta, Suhaj, Egypt — an architectural design project delivering multiple façade options to an elegant classical aesthetic.", stats:[{label:"Floors",value:"G+3+Roof"},{label:"Location",value:"Suhaj, Egypt"}], images:["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=1200&q=80","https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80","https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80"] },
+  { id:19,  badge:"Resort", category:"Resort / Hospitality", title:"Jaz Belvedere Resort", location:"Sharm El Sheikh, South Sinai, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/19.jpeg", description:"A luxury resort development in Sharm El Sheikh under Travco Group — one of Egypt's leading hospitality groups.", stats:[{label:"Client",value:"Travco Group"},{label:"Category",value:"Luxury Resort"}], images:["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=80","https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80","https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80","https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80"] },
+  { id:20, badge:"Resort", category:"Resort / Hospitality", title:"Samaya & Lamaya Resorts", location:"Marsa Alam, Red Sea, Egypt", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/empty.jpg", description:"Twin luxury resort developments — Samaya and Lamaya — under Travco Group in Marsa Alam, Red Sea.", stats:[{label:"Resorts",value:"2"},{label:"Client",value:"Travco Group"}], images:["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80","https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80","https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=800&q=80","https://images.unsplash.com/photo-1549294413-26f195200c16?w=800&q=80"] },
+  { id:21, badge:"Residential", category:"Residential — Villas", title:"10 Villas – MBR City District One", location:"Mohamed Bin Rashid Al Maktoum City, District One, Phase 3B, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/21.png", description:"Construction of 10 G+1 luxury villas at Mohamed Bin Rashid Al Maktoum City, District One, Phase 3B — one of Dubai's most prestigious villa communities.", stats:[{label:"Villas",value:"10"},{label:"Floors",value:"G+1"},{label:"Community",value:"MBR City"}], images:["https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80","https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&q=80","https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80"] },
+  { id:22,  badge:"Residential", category:"Residential — Villa", title:"Residential Villa", location:"Jabal Ali Hills, Saih Shuaib 1, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/empty.jpg", description:"A B+G+1 luxury residential villa at Plot No. 5131647, Jabal Ali Hills, Saih Shuaib 1 — a contemporary high-spec private residence.", stats:[{label:"Floors",value:"B+G+1"},{label:"Location",value:"Jabal Ali, Dubai"}], images:["https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1200&q=80","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80","https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=800&q=80","https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80"] },
+  { id:23,  badge:"Residential", category:"Residential — Villas", title:"28 Villas – AlQutaina Compound", location:"AlQutaina Governmental Residential Compound, Sharjah, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/empty.jpg", description:"Establishment of 28 G+1 villas within the AlQutaina Governmental Residential Compound in Sharjah (366 Villas total), under the Sharjah Housing Programme.", stats:[{label:"Villas",value:"28"},{label:"Floors",value:"G+1"},{label:"Location",value:"Sharjah, UAE"}], images:["https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80","https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&q=80","https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80"] },
+  { id:24,  badge:"Residential", category:"Residential — Villas", title:"96 Villas – Damac Lagoons", location:"Damac Lagoons, Dubai, UAE", cover:"https://swift-atlantis-system.vercel.app/Images/PROJECTS-COVER-PHOTO/empty.jpg", description:"Construction of 96 villas at Damac Lagoons, Dubai — an ongoing high-profile villa community project under Consultant Jouzy Consulting Engineers.", stats:[{label:"Villas",value:"96"},{label:"Community",value:"Damac Lagoons"},{label:"Location",value:"Dubai, UAE"}], images:["https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80","https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80","https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80","https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80"] }
+];
+
+// ── BADGE COLORS ──
+const BADGE_COLORS = {
+  'Resort':     'bg-amber-100 text-amber-800',
+  'Hotel':      'bg-blue-100 text-blue-800',
+  'Residential':'bg-teal-100 text-teal-800',
+  'Mixed Use':  'bg-purple-100 text-purple-800',
+  'Industrial': 'bg-orange-100 text-orange-800',
+  'Healthcare': 'bg-red-100 text-red-800',
+  'Design':     'bg-pink-100 text-pink-800',
+};
+function badgeColor(b){ return BADGE_COLORS[b] || 'bg-gray-100 text-gray-700'; }
+
+// ── RENDER PROJECTS GRID ──
+function renderProjects(){
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = PROJECTS.map((p,i) => `
+    <div class="project-card rounded-2xl overflow-hidden bg-white shadow-sm fade-up"
+         style="transition-delay:${(i%3)*0.07}s"
+         onclick="openProject(${p.id})">
+      <div class="relative overflow-hidden h-52">
+        <img src="${p.cover}" alt="${p.title}" class="project-img w-full h-full object-cover"
+             onerror="this.src='https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=700&q=70'" />
+        <div class="project-overlay absolute inset-0"></div>
+        <div class="absolute top-3 left-3">
+          <span class="project-badge ${badgeColor(p.badge)} px-2.5 py-1 rounded-full text-xs">${p.badge}</span>
+        </div>
+      </div>
+      <div class="p-5">
+        <h3 class="font-display text-xl text-slate2-800 mb-1 leading-snug font-semibold uppercase">${p.title}</h3>
+        <div class="flex items-center gap-1 text-xs text-slate2-400 font-label tracking-wider mb-4">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${p.location}
+        </div>
+        <div class="flex flex-wrap gap-2">
+          ${p.stats.slice(0,2).map(s => `
+            <div class="bg-sand-50 border border-sand-100 rounded-lg px-3 py-1.5 text-center">
+              <div class="font-display text-base text-slate2-800 font-semibold">${s.value}</div>
+              <div class="font-label text-xs text-slate2-400 tracking-wider uppercase" style="font-size:0.6rem">${s.label}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="flex items-center gap-1 text-xs text-sand-600 font-label tracking-wider uppercase mt-4">
+          View Details <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  observeFadeUps();
+}
+
+// ── OPEN PROJECT DETAIL ──
+function openProject(id){
+  const p = PROJECTS.find(x => x.id === id);
+  if(!p) return;
+
+  document.getElementById('detail-hero').style.backgroundImage = `url('${p.images[0]}')`;
+  document.getElementById('detail-badge').textContent = p.badge;
+  document.getElementById('detail-title').textContent = p.title;
+  document.getElementById('detail-location').textContent = '📍 ' + p.location;
+  document.getElementById('detail-desc').textContent = p.description;
+  document.getElementById('detail-category').textContent = p.category;
+
+  document.getElementById('detail-stats').innerHTML = p.stats.map(s => `
+    <div class="flex justify-between items-center pb-3 border-b border-sand-100">
+      <span class="font-label text-xs text-slate2-400 tracking-widest uppercase">${s.label}</span>
+      <span class="font-display text-xl text-slate2-800 font-semibold">${s.value}</span>
+    </div>
+  `).join('');
+
+  const mainImg = document.getElementById('gallery-main');
+  mainImg.src = p.images[0];
+
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  thumbsEl.innerHTML = p.images.map((img,i) => `
+    <div class="rounded-xl overflow-hidden cursor-pointer" onclick="setGalleryMain('${img}', this)">
+      <img src="${img}" alt="Gallery ${i+1}" class="gallery-thumb w-full thumb-img ${i===0?'active-thumb':''}" />
+    </div>
+  `).join('');
+
+  document.getElementById('main-site').classList.add('hidden-site');
+  document.getElementById('project-detail').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setGalleryMain(src, el){
+  document.getElementById('gallery-main').src = src;
+  document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active-thumb'));
+  el.querySelector('img').classList.add('active-thumb');
+}
+
+function showMain(){
+  document.getElementById('main-site').classList.remove('hidden-site');
+  document.getElementById('project-detail').classList.remove('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => {
+    const el = document.getElementById('projects');
+    if(el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+// ── NAV SCROLL ── (always dark since navbar is on dark hero)
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+function toggleMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+function observeFadeUps(){
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+}
+
+renderProjects();
+observeFadeUps();
+</script>
+</body>
+</html>
