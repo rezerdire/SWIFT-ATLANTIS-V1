@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- FONTS: Oswald (industrial display) + Barlow (strong body) + Barlow Condensed (labels) -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/feather-icons"></script>
 
   <script>
     tailwind.config = {
@@ -41,6 +42,16 @@
     .hero-carousel {
       position: relative; min-height: 100vh; overflow: hidden;
       background: #16232e;
+          background:
+        linear-gradient(
+            rgba(22,35,46,0.75),
+            rgba(22,35,46,0.75)
+        ),
+        url('Images/logo/swift-bg.png');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     }
     /* Subtle steel grid texture */
     .hero-carousel::before {
@@ -208,9 +219,9 @@
         SWIFT<br/><span class="text-sand-400">ATLANTIS</span><br/><span class="font-light text-white/80" style="font-size:0.72em">CONTRACTING</span>
       </h1>
       <div class="w-16 h-1 bg-sand-500 mb-6 fade-up" style="transition-delay:0.15s"></div>
-      <p class="font-body text-white/70 text-lg max-w-xl leading-relaxed mb-10 fade-up" style="transition-delay:0.2s">
-        A Dubai-based general contracting company delivering integrated construction solutions — from excavation to handover — with precision, quality, and trust.
-      </p>
+        <p class="font-body text-white/70 text-lg max-w-xl leading-relaxed mb-10 fade-up">
+          Established in 2022, Swift Atlantis Contracting L.L.C is a Dubai-based main contractor authorized up to G+1 classification, delivering integrated construction solutions from excavation and foundation works through project completion, handover, and issuance of Building Completion Certificates.
+        </p>
       <div class="flex flex-wrap gap-4 mb-16 fade-up" style="transition-delay:0.3s">
         <a href="#projects" class="bg-sand-600 text-white px-8 py-3.5 font-label tracking-widest uppercase text-sm hover:bg-sand-700 transition-colors" style="clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);">View Projects</a>
         <a href="#contact" class="border border-white/30 text-white px-8 py-3.5 font-label tracking-widest uppercase text-sm hover:border-sand-400 hover:text-sand-400 transition-all">Get In Touch →</a>
@@ -230,7 +241,7 @@
         <div class="w-px bg-white/10 self-stretch"></div>
         <div>
           <div class="hero-number text-5xl text-sand-400 font-bold">2022</div>
-          <div class="font-label text-xs text-white/50 tracking-widest uppercase mt-1">Est. UAE</div>
+          <div class="font-label text-xs text-white/50 tracking-widest uppercase mt-1">2022 Established</div>
         </div>
       </div>
     </div>
@@ -250,13 +261,15 @@
         </h2>
         <div class="gold-line w-24 mb-8"></div>
         <p class="font-body text-slate2-600 leading-relaxed mb-5">
-          Swift Atlantis Contracting L.L.C was established on 15th September 2022 under Commercial License No. 1080914, approved by the Dubai Economic Department and Dubai Municipality.
+        Swift Atlantis Contracting L.L.C was established on 15 September 2022 under Commercial License No. 1080914 to undertake construction and contracting activities in accordance with approvals granted by the Department of Economy and Tourism and Dubai Municipality.
         </p>
-        <p class="font-body text-slate2-600 leading-relaxed mb-8">
-          We are licensed to carry out integrated construction works as a main contractor — from excavations through to handover of building completion certificates — with approved scope for G+1 and complex multi-storey structures.
+
+        <p class="font-body text-slate2-600 leading-relaxed mb-5">
+        The company is authorized to execute construction works up to G+1 classification and operates as a main contractor, delivering fully integrated construction solutions from excavation and foundation works through project completion, handover, and issuance of Building Completion Certificates.
         </p>
+
         <p class="font-body text-slate2-600 leading-relaxed">
-          Our approach combines rigorous compliance with local authority regulations, an unwavering commitment to safety and quality, and on-time delivery aligned with project programs and consultant directives.
+        Since its establishment, the company has remained committed to maintaining the highest standards of quality, safety, efficiency, and client satisfaction across all construction activities.
         </p>
       </div>
 
@@ -279,8 +292,9 @@
           </div>
           <div class="cert-card bg-warm-50 rounded-xl p-6">
             <div class="section-label mb-2">Approved Scope</div>
-            <div class="font-display text-xl text-slate2-800 font-semibold">G+1</div>
-            <div class="text-xs text-slate2-500 mt-1">& Multi-storey</div>
+            <div class="font-display text-xl text-slate2-800 font-semibold">G+1 Classification
+</div>
+            <div class="text-xs text-slate2-500 mt-1">Dubai Approved</div>
           </div>
         </div>
         <div class="mt-6 rounded-xl overflow-hidden">
@@ -319,7 +333,7 @@
           <div class="section-label mb-3" style="color:#d4ad78">Vision</div>
           <h3 class="font-display text-3xl text-white font-semibold uppercase mb-3">To Be the UAE's Most Trusted Contractor</h3>
           <p class="font-body text-slate2-300 text-sm leading-relaxed">
-            To be recognized as a leading, reliable, and innovative contracting company in the UAE — setting the benchmark for construction quality, regulatory compliance, and client satisfaction across every project we undertake.
+            To execute construction projects in full compliance with local authority regulations, applying strict quality control, safety standards, and professional project management to ensure successful and timely delivery.
           </p>
         </div>
         <div class="bg-white border border-sand-200 rounded-2xl p-8">
@@ -331,43 +345,84 @@
         </div>
       </div>
     </div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
 
-    <div class="fade-up">
-      <div class="section-label mb-6 text-center">Core Values</div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">◈</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Quality</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Uncompromising standards at every phase</div>
-        </div>
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">⬡</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Safety</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">HSE compliance on every site, every day</div>
-        </div>
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">◇</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Integrity</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Transparent dealings with every stakeholder</div>
-        </div>
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">◉</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Timeliness</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Projects delivered on schedule, every time</div>
-        </div>
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">△</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Innovation</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Modern methods and engineering solutions</div>
-        </div>
-        <div class="value-card bg-white p-5 rounded-xl pl-5">
-          <div class="text-sand-500 text-2xl mb-2">▣</div>
-          <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Compliance</div>
-          <div class="text-xs text-slate2-500 mt-1 leading-relaxed">Full adherence to Dubai Municipality rules</div>
-        </div>
-      </div>
+  <!-- Quality -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
     </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Quality</div>
+    <div class="text-xs text-slate2-500 mt-1">Uncompromising standards at every phase</div>
   </div>
+
+  <!-- Safety -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 2l8 4v6c0 5.25-3.5 9.75-8 11-4.5-1.25-8-5.75-8-11V6l8-4z"/>
+      </svg>
+    </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Safety</div>
+    <div class="text-xs text-slate2-500 mt-1">HSE compliance on every site, every day</div>
+  </div>
+
+  <!-- Integrity -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 17l-5 3 1-5-4-4 5-.7L12 5l3 5.3 5 .7-4 4 1 5z"/>
+      </svg>
+    </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Integrity</div>
+    <div class="text-xs text-slate2-500 mt-1">Transparent dealings with every stakeholder</div>
+  </div>
+
+  <!-- Timeliness -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <circle cx="12" cy="12" r="9" stroke-width="2"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 7v5l3 3"/>
+      </svg>
+    </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Timeliness</div>
+    <div class="text-xs text-slate2-500 mt-1">Projects delivered on schedule, every time</div>
+  </div>
+
+  <!-- Innovation -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12c.8.8 1.5 1.8 1.8 3h4.4c.3-1.2 1-2.2 1.8-3A7 7 0 0012 2z"/>
+      </svg>
+    </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Innovation</div>
+    <div class="text-xs text-slate2-500 mt-1">Modern methods and engineering solutions</div>
+  </div>
+
+  <!-- Compliance -->
+  <div class="value-card bg-white p-5 rounded-xl">
+    <div class="text-sand-500 mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m-7-6h8a2 2 0 012 2v14l-6-3-6 3V6a2 2 0 012-2z"/>
+      </svg>
+    </div>
+    <div class="font-display text-lg text-slate2-800 font-semibold uppercase">Compliance</div>
+    <div class="text-xs text-slate2-500 mt-1">Full adherence to Dubai Municipality rules</div>
+  </div>
+
+</div>
+
+
 </section>
 
 
@@ -432,8 +487,8 @@
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
     <div class="mb-14 fade-up">
       <div class="section-label mb-4">Portfolio</div>
-      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Projects by <span class="font-light text-sand-600">Our Director</span></h2>
-      <p class="font-body text-slate2-500 mt-4 max-w-xl text-sm leading-relaxed">Key projects managed by Eng. Ahmed Nada across UAE and Egypt — spanning luxury resorts, residential towers, commercial buildings, and more.</p>
+      <h2 class="section-title text-5xl lg:text-6xl text-slate2-900 font-semibold uppercase">Projects <!-- <span class="font-light text-sand-600">Our Director</span> --> </h2>
+      <p class="font-body text-slate2-500 mt-4 max-w-xl text-sm leading-relaxed">Projects successfully executed under the management and supervision of Eng. Ahmed Nada during more than 20 years of professional experience in the UAE and Egypt, alongside projects completed by Swift Atlantis Contracting L.L.C.</p>
     </div>
     <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </div>
@@ -570,12 +625,17 @@
         <div class="section-label mb-4" style="color:#d4ad78">Leadership</div>
         <h2 class="section-title text-5xl lg:text-6xl text-white font-semibold uppercase mb-6">Two Decades of <span style="color:#d4ad78" class="font-light">Construction Mastery</span></h2>
         <div class="gold-line w-24 mb-8"></div>
-        <p class="font-body text-slate2-300 leading-relaxed mb-5 text-sm">
-          Eng. Ahmed Mohamed Nada brings over 20 years of hands-on construction experience to Swift Atlantis. A graduate of Mansoura University's Faculty of Engineering (Architectural Engineering, 2002), he has progressed through every engineering stage — from site observation and supervision to full project contracting and consultancy.
-        </p>
-        <p class="font-body text-slate2-300 leading-relaxed text-sm">
-          His portfolio spans luxury resorts, high-rise residential towers, hospitals, factories, and retail complexes across the UAE and Egypt — serving prestigious clients and working under major development groups including Travco Group.
-        </p>
+      <p class="font-body text-slate2-300 leading-relaxed mb-5 text-sm">
+      Eng. Ahmed Nada graduated from Mansoura University, Faculty of Engineering, Department of Architectural Engineering in May 2002.
+      </p>
+
+      <p class="font-body text-slate2-300 leading-relaxed text-sm">
+      With more than 20 years of extensive experience in the construction industry, he has developed a strong reputation for technical excellence, leadership, and successful project delivery. His expertise covers all stages of engineering and project management, from site observation, supervision, and implementation to contracting and consultancy.
+      </p>
+
+      <p class="font-body text-slate2-300 leading-relaxed text-sm mt-5">
+      He has successfully contributed to a wide range of projects across the UAE and Egypt, including villas, factories, resorts, hotels, malls, and residential buildings of various scales.
+      </p>
 
         <div class="flex flex-wrap gap-2 mt-8">
           <span class="text-xs font-label bg-slate2-800 text-slate2-300 px-3 py-1.5 rounded-full tracking-wider uppercase">Site Supervision</span>
